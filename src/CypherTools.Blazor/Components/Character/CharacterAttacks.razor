@@ -1,0 +1,107 @@
+﻿@inject CypherTools.Blazor.Services.DiscordWebhookService discordWebhookService
+<div>
+
+    @if (!showDetail)
+    {
+        <button @onclick="ToggleDetails">Show Details</button>
+        <span>@characterAttack.Name</span>
+    }
+    else
+    {
+        <button @onclick="ToggleDetails">Hide Details</button>
+        <button @onclick="ToggleEdit">Toggle Edit</button>
+        <button @onclick="Remove">X</button>
+        @if (isEditing)
+        {
+            <div>
+                <label>
+                    Name:
+                    <input @bind="characterAttack.Name" />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Level:
+                    <select @bind="characterAttack.SkillLevel">
+                        <option value="Untrained">Untrained</option>
+                        <option value="Trained">Trained</option>
+                        <option value="Specialized">Specialized</option>
+                        <option value="Inability">Inability</option>
+                    </select>
+                </label>
+            </div>
+            <div>
+                <label>
+                    Damage:
+                    <input @bind="characterAttack.Damage" />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Modifier:
+                    <input @bind="characterAttack.AttackModifier" />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Stat:
+                    <select @bind="characterAttack.Stat">
+                        <option value="Intelect">Intelect</option>
+                        <option value="Might">Might</option>
+                        <option value="Speed">Speed</option>
+                    </select>
+                </label>
+            </div>
+        }
+        else
+        {
+            <div>
+                <label>
+                    Name:
+                </label>
+                <span>@characterAttack.Name</span>
+            </div>
+            <div>
+                <label>
+                    Skill Level:
+                </label>
+                <span>@characterAttack.SkillLevel</span>
+            </div>
+            <div>
+                
+            </div>
+        }
+    }
+
+
+</div>
+
+@code {
+    [Parameter]
+    public Models.CharacterAttack characterAttack { get; set; }
+
+    [Parameter]
+    public EventCallback<Models.CharacterAttack> attackRemoveCallback { get; set; }
+
+    private bool showDetail = false;
+    private bool isEditing = false;
+
+    private void ToggleEdit()
+    {
+        isEditing = !isEditing;
+    }
+    private void ToggleDetails()
+    {
+        showDetail = !showDetail;
+    }
+    private async Task Remove()
+    {
+        await attackRemoveCallback.InvokeAsync(characterAttack);
+    }
+    private async Task RollAttack()
+    {
+
+
+        await discordWebhookService.SendDieRollWebhook("", new Models.RollResult());
+    }
+}

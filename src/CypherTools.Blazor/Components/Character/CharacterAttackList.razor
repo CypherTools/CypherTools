@@ -1,0 +1,22 @@
+﻿<h3>Attacks</h3>
+<div>
+    @foreach (var attack in characterAttacks)
+    {
+        <CypherTools.Blazor.Components.Character.CharacterAttacks characterAttack="attack" attackRemoveCallback="Remove"></CypherTools.Blazor.Components.Character.CharacterAttacks>
+    }
+    <button @onclick="AddAbility">Add Attack</button>
+</div>
+@code {
+    [Parameter]
+    public List<Models.CharacterAttack> characterAttacks { get; set; }
+
+    private void Remove(Models.CharacterAttack AttackToRemove)
+    {
+        characterAttacks.Remove(AttackToRemove);
+    }
+
+    private void AddAbility()
+    {
+        characterAttacks.Add(new Models.CharacterAttack { Name = "New Attack" });
+    }
+}

@@ -1,0 +1,22 @@
+﻿<h3>Skills</h3>
+<div>
+    @foreach (var skill in characterSkills)
+    {
+        <CypherTools.Blazor.Components.Character.CharacterSkills characterSkill="skill" skillRemoveCallback="Remove"></CypherTools.Blazor.Components.Character.CharacterSkills>
+    }
+    <button @onclick="AddAbility">Add Skill</button>
+</div>
+@code {
+    [Parameter]
+    public List<Models.CharacterSkill> characterSkills { get; set; }
+
+    private void Remove(Models.CharacterSkill SkillToRemove)
+    {
+        characterSkills.Remove(SkillToRemove);
+    }
+
+    private void AddAbility()
+    {
+        characterSkills.Add(new Models.CharacterSkill { Name = "New Skill" });
+    }
+}

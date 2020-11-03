@@ -1,0 +1,101 @@
+﻿@inject CypherTools.Blazor.Services.RollService RollService
+@inject CypherTools.Blazor.Services.DiscordWebhookService DiscordWebhookService
+<div>
+
+    @if (!showDetail)
+    {
+        <button @onclick="ToggleDetails">Show Details</button>
+        <span>@characterSkill.Name</span> <button @onclick="RollSkill">Roll</button>
+    }
+    else
+    {
+        <button @onclick="ToggleDetails">Hide Details</button>
+        <button @onclick="ToggleEdit">Toggle Edit</button>
+        <button @onclick="Remove">X</button>
+        @if (isEditing)
+        {
+            <div>
+                <label>
+                    Name:
+                    <input @bind="characterSkill.Name" />
+                </label>
+            </div>
+            <div>
+                <label>
+                    Tier:
+                    <select @bind="characterSkill.SkillLevel">
+                        <option value="Untrained">Untrained</option>
+                        <option value="Trained">Trained</option>
+                        <option value="Specialized">Specialized</option>
+                        <option value="Inability">Inability</option>
+                    </select>
+                </label>
+            </div>
+            <div>
+                <label for="note">
+                    Note:
+                </label>
+                <textarea id="note" rows="1" class="form-control" style="resize:both;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';" @bind="characterSkill.Notes" />
+            </div>
+        }
+        else
+        {
+            <div>
+                <label>
+                    Name:
+                </label>
+                <span>@characterSkill.Name</span>
+            </div>
+            <div>
+                <label>
+                    Level:
+                </label>
+                <span>@characterSkill.SkillLevel</span>
+            </div>
+            <div>
+                <label>
+                    Notes:
+                </label>
+                <br />
+                <span>
+                    @characterSkill.Notes
+                </span>
+            </div>
+        }
+    }
+
+
+</div>
+
+@code {
+    [Parameter]
+    public CypherTools.Blazor.Models.CharacterSkill characterSkill { get; set; }
+
+    [Parameter]
+    public EventCallback<Models.CharacterSkill> skillRemoveCallback { get; set; }
+
+    [CascadingParameter(Name = "Character")]
+    public CypherTools.Blazor.Models.Character Character { get; set; }
+
+    private bool showDetail = false;
+    private bool isEditing = false;
+
+    private void ToggleEdit()
+    {
+        isEditing = !isEditing;
+    }
+    private void ToggleDetails()
+    {
+        showDetail = !showDetail;
+    }
+    private async Task Remove()
+    {
+        await skillRemoveCallback.InvokeAsync(characterSkill);
+    }
+
+    private async Task RollSkill()
+    {
+        var result = await RollService.GetSkillResult(Character.Name, characterSkill, 0);
+        await DiscordWebhookService.SendDieRollWebhook(Character.DiscordWebHook, result);
+    }
+}

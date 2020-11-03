@@ -1,0 +1,26 @@
+﻿<h3>Cyphers</h3>
+<div>
+    @foreach (var cypher in characterCyphers)
+    {
+        <CypherTools.Blazor.Components.Character.CharacterCypher cypher="cypher" RemoveCallBack="RemoveCypher"></CypherTools.Blazor.Components.Character.CharacterCypher>
+    }
+
+    <button @onclick="AddCypher">Add Cypher</button>
+</div>
+
+@code {
+    [Parameter]
+    public List<CypherTools.Blazor.Models.CharacterCypher> characterCyphers { get; set; }
+
+    private bool isHidden = false;
+
+    private void AddCypher()
+    {
+        characterCyphers.Add(new Models.CharacterCypher() { Name = "New Cypher" });
+    }
+
+    private void RemoveCypher(CypherTools.Blazor.Models.CharacterCypher cypherToRemove)
+    {
+        characterCyphers.Remove(cypherToRemove);
+    }
+}

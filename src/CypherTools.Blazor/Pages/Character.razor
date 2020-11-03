@@ -1,0 +1,89 @@
+﻿@page "/character"
+@page "/character/{id:int}"
+@using System.Net.Http
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject CypherTools.Blazor.Services.SessionService Session
+
+<h2>Character</h2>
+
+@if (character == null)
+{
+    <span>Loading</span>
+}
+else
+{
+    <button @onclick="SaveCharacter">Save</button>
+    <input @bind="character.Name" />
+    <br />
+    <input @bind="character.DiscordWebHook" placeholder="Discord Webhook URL"/>
+
+    <CascadingValue Name="Character" Value="character">
+        <CypherTools.Blazor.Components.Character.CharacterPool characterPools="character.Pools"></CypherTools.Blazor.Components.Character.CharacterPool>
+        <br />
+        <CypherTools.Blazor.Components.Character.CharacterRecoveryRolls characterRecoveryRolls="character.RecoveryRolls"></CypherTools.Blazor.Components.Character.CharacterRecoveryRolls>
+        <br />
+        <CypherTools.Blazor.Components.Character.CharacterInventory inventories="character.Inventory" characterId="character.CharacterId"></CypherTools.Blazor.Components.Character.CharacterInventory>
+        <br />
+        <CypherTools.Blazor.Components.Character.CharacterAttackList characterAttacks="character.Attacks"></CypherTools.Blazor.Components.Character.CharacterAttackList>
+        <br />
+        <CypherTools.Blazor.Components.Character.CharacterSkillList characterSkills="character.Skills"></CypherTools.Blazor.Components.Character.CharacterSkillList>
+        <br />
+        <CypherTools.Blazor.Components.Character.CharacterAbilityList characterAbilities="character.Abilities"></CypherTools.Blazor.Components.Character.CharacterAbilityList>
+        <br />
+        <CypherTools.Blazor.Components.Character.CharacterCypherList characterCyphers="character.Cyphers"></CypherTools.Blazor.Components.Character.CharacterCypherList>
+        <br />
+        <CypherTools.Blazor.Components.Character.CypherCharacterArtifactList characterArtifacts="character.Artifacts"></CypherTools.Blazor.Components.Character.CypherCharacterArtifactList>
+        <br />
+    </CascadingValue>
+
+}
+
+
+@code {
+    [Parameter]
+    public int id { get; set; } = 0;
+
+    private CypherTools.Blazor.Models.Character character;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (id == 0)
+        {
+            character = new Models.Character();
+            character.Name = "New Character";
+
+            character.Pools.Add(new Models.CharacterPool { Name = "Might", PoolIndex = 0, PoolMax = 10 });
+            character.Pools.Add(new Models.CharacterPool { Name = "Speed", PoolIndex = 1, PoolMax = 10 });
+            character.Pools.Add(new Models.CharacterPool { Name = "Intellect", PoolIndex = 2, PoolMax = 10 });
+
+            character.RecoveryRolls.Add(new Models.CharacterRecoveryRoll { RollName = "1 Action", RollIndex = 0 });
+            character.RecoveryRolls.Add(new Models.CharacterRecoveryRoll { RollName = "10 Minutes", RollIndex = 1 });
+            character.RecoveryRolls.Add(new Models.CharacterRecoveryRoll { RollName = "1 Hour", RollIndex = 2 });
+            character.RecoveryRolls.Add(new Models.CharacterRecoveryRoll { RollName = "10 Hours", RollIndex = 3 });
+
+            character.RecoveryDie = 6;
+            character.RecoveryMod = 1;
+
+            Session.AddCharacter(character);
+        }
+        else
+        {
+            character = Session.UserCharacters.First(x => x.CharacterId == id);
+        }
+    }
+
+    private async Task SaveCharacter()
+    {
+        await Session.SaveData();
+
+        //if (character.CharacterId == 0)
+        //{
+        //    await Http.PostAsJsonAsync<CypherTools.Blazor.Models.Character>($"api/Character/", character);
+        //}
+        //else
+        //{
+        //    await Http.PutAsJsonAsync<CypherTools.Blazor.Models.Character>($"api/Character/{id}", character);
+        //}
+    }
+}
