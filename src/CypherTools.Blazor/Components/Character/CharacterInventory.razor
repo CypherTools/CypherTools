@@ -16,7 +16,7 @@
                 {
                     <tr>
                         <td><input @bind="inventory.ItemName" /></td>
-                        <td><input @bind="inventory.Qty" /></td>
+                        <td><input @bind="inventory.Qty" style="width: 30px;" /></td>
                         <td>
                             <button @onclick="@(() => DeleteInventory(inventory))">X</button>
                         </td>

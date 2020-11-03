@@ -19,22 +19,31 @@ else
     <input @bind="character.DiscordWebHook" placeholder="Discord Webhook URL"/>
 
     <CascadingValue Name="Character" Value="character">
-        <CypherTools.Blazor.Components.Character.CharacterPool characterPools="character.Pools"></CypherTools.Blazor.Components.Character.CharacterPool>
+
+        <CypherTools.Blazor.Components.Character.CharacterPool characterPools="character.Pools" />
         <br />
-        <CypherTools.Blazor.Components.Character.CharacterRecoveryRolls characterRecoveryRolls="character.RecoveryRolls"></CypherTools.Blazor.Components.Character.CharacterRecoveryRolls>
+        <CypherTools.Blazor.Components.Character.CharacterRecoveryRolls characterRecoveryRolls="character.RecoveryRolls" />
         <br />
-        <CypherTools.Blazor.Components.Character.CharacterInventory inventories="character.Inventory" characterId="character.CharacterId"></CypherTools.Blazor.Components.Character.CharacterInventory>
-        <br />
-        <CypherTools.Blazor.Components.Character.CharacterAttackList characterAttacks="character.Attacks"></CypherTools.Blazor.Components.Character.CharacterAttackList>
-        <br />
-        <CypherTools.Blazor.Components.Character.CharacterSkillList characterSkills="character.Skills"></CypherTools.Blazor.Components.Character.CharacterSkillList>
-        <br />
-        <CypherTools.Blazor.Components.Character.CharacterAbilityList characterAbilities="character.Abilities"></CypherTools.Blazor.Components.Character.CharacterAbilityList>
-        <br />
-        <CypherTools.Blazor.Components.Character.CharacterCypherList characterCyphers="character.Cyphers"></CypherTools.Blazor.Components.Character.CharacterCypherList>
-        <br />
-        <CypherTools.Blazor.Components.Character.CypherCharacterArtifactList characterArtifacts="character.Artifacts"></CypherTools.Blazor.Components.Character.CypherCharacterArtifactList>
-        <br />
+
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <CypherTools.Blazor.Components.Character.CharacterInventory inventories="character.Inventory" characterId="character.CharacterId" />
+                    <br />
+                    <CypherTools.Blazor.Components.Character.CharacterAttackList characterAttacks="character.Attacks" />
+                    <br />
+                    <CypherTools.Blazor.Components.Character.CharacterAbilityList characterAbilities="character.Abilities"/>
+                </div>
+                <div class="col-lg-6">
+                    <CypherTools.Blazor.Components.Character.CharacterSkillList characterSkills="character.Skills"/>
+                    <br />                    
+                    <CypherTools.Blazor.Components.Character.CharacterCypherList characterCyphers="character.Cyphers"/>
+                    <br />
+                    <CypherTools.Blazor.Components.Character.CypherCharacterArtifactList characterArtifacts="character.Artifacts"/>
+                </div>
+            </div>
+        </div>
     </CascadingValue>
 
 }
